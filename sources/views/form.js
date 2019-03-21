@@ -2,13 +2,15 @@ import {JetView} from "webix-jet";
 
 export default class FormView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const authWindow = {
 			rows: [
 				{
 					cols: [
 						{
 							view: "button",
-							value: "Login",
+							value: _("Login"),
 							batch: "user",
 							type: "form",
 							click: () => {
@@ -17,7 +19,7 @@ export default class FormView extends JetView {
 						},
 						{
 							view: "button",
-							value: "Registration",
+							value: _("Registration"),
 							batch: "guest",
 							type: "form",
 							click: () => {
@@ -43,14 +45,15 @@ export default class FormView extends JetView {
 							view: "text",
 							localId: "username",
 							name: "username",
-							label: "Username",
+							label: _("Username"),
+							labelPosition: "left",
 							batch: "b2"
 						},
 						{
 							view: "text",
 							localId: "password",
 							name: "password",
-							label: "Password",
+							label: _("Password"),
 							batch: "b1"
 						},
 						{
@@ -58,13 +61,14 @@ export default class FormView extends JetView {
 								{
 									view: "button",
 									localId: "userButton",
-									value: "Login",
+									value: _("Login"),
 									batch: "b1",
 									click: () => {
 										const values = this.$getForm().getValues();
-										this.getData(values);
+										// this.getData(values);
+										this.onSubmit(values);
 									}
-								},
+								}
 							]
 						}
 					],
@@ -77,12 +81,12 @@ export default class FormView extends JetView {
 
 		return {
 			view: "window",
-			localId: "authWindow",
+			localId: "window",
 			width: 600,
 			position: "center",
 			modal: true,
 			head: {
-				template: "Authorization",
+				template: _("Authorization"),
 				localId: "formTemplate"
 			},
 			body: authWindow,
@@ -95,17 +99,18 @@ export default class FormView extends JetView {
 		};
 	}
 	change_mode(mode) {
+		const _ = this.app.getService("locale")._;
 		const formTemplate = this.$$("formTemplate");
 		const userButton = this.$$("userButton");
 
 		if (mode == "authorization") {
-			formTemplate.define({template: "Authorization"});
-			userButton.define({value: "Login"});
+			formTemplate.define({template: _("Authorization")});
+			userButton.define({value: _("Login")});
 			this.$getForm().showBatch("b1");
 		}
 		else {
-			formTemplate.define({template: "Registration"});
-			userButton.define({value: "Register"});
+			formTemplate.define({template: _("Registration")});
+			userButton.define({value: _("Register")});
 			this.$getForm().showBatch("b2", true);
 		}
 		this.$getForm().clear();
@@ -114,55 +119,27 @@ export default class FormView extends JetView {
 		formTemplate.refresh();
 	}
 
-	getData(values) {
-		let form = this.$getForm();
-		let authWindow = this.$authWindow();
-		if (form.validate()) {
-			if (!values.username) {
-				webix.ajax().post("http://localhost:3013/users/login", values).then(function(response) {
-					response = response.json();
-					webix.storage.local.put("tokenOfUser", response);
-					webix.message({ type:"success", text:"You are logged in" });
-					authWindow.hide();
-				}, function(err) {
-					if (err.status == 403) {
-						webix.message({ type:"error", text:"Неверный логин или пароль" });
-						form.clear();
-					}
-				});
+	showWindow(values, filled) {
+		this.getRoot().show();
+		this.onSubmit = function(data) {
+			if (this.$getForm().validate()) {
+				filled(data);
+				this.$$("window").hide();
 			}
 			else {
-				webix.ajax().post("http://localhost:3013/users/registration", values).then(function (response) {
-					response = response.json();
-					webix.storage.local.put("tokenOfUser", response);
-					webix.message({ type:"success", text:"You are registered" });
-					authWindow.hide();
-				}, function (err) {
-					webix.message({ type:"error", text: err.responseText });
-				});
+				webix.message({ type:"error", text:"Form data is invalid" });
 			}
-		}
-		else {
-			webix.message({ type:"error", text:"Form data is invalid" });
-		}
+		};
 	}
 	init() {
-		let token = webix.storage.local.get("tokenOfUser");
-		if (!token) {
-			this.$$("authWindow").show();
-		}
-		webix.attachEvent("onBeforeAjax",
-			(mode, url, data, request, headers) => {
-				if (webix.storage.local.get("tokenOfUser")) {
-					headers["authorization"] = webix.storage.local.get("tokenOfUser").token;
-				}
-			}
-		);
 	}
 	$getForm() {
 		return this.$$("form");
 	}
 	$authWindow() {
-		return this.$$("authWindow");
+		return this.$$("window");
+	}
+	hideForm() {
+		this.getRoot().hide();
 	}
 }

@@ -7,10 +7,11 @@ export default class TestView extends JetView {
 		return {
 			view: "datatable",
 			localId: "datatable",
+			select: true,
 			columns: [
 				{id: "index", width: 50, header: "No"},
-				{id: "date",  width: 250, fillspace: true, header: _("Date")},
-				{id: "result",fillspace: true,  header: _("Result")}
+				{id: "date", width: 250, fillspace: true, header: _("Date")},
+				{id: "result",fillspace: true, header: _("Result")}
 			],
 			url: "http://localhost:3013/testresults/all",
 			save: {

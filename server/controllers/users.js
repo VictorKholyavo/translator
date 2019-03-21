@@ -20,13 +20,13 @@ app.get('/status', async (req, res) => {
 	try {
 		await User.findUserByToken(req.headers.authorization, function(err, userInfo) {
 			if (err) {
-				return res.sendStatus(403);
+				return res.status(403).send("You must be logged to see this page");
 			}
 			return res.json({token: req.body.token, username: userInfo.username});
 		})
 	}
 	catch (error) {
-		return res.sendStatus(403);
+		return res.status(403).send("You must be logged to see this page");
 	}
 })
 

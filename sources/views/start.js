@@ -40,7 +40,7 @@ export default class StartView extends JetView {
 								{id: "en", value: "English" },
 								{id: "ru", value: "Русский" }
 							],
-							click:() => {
+							click: () => {
 								const langs = this.app.getService("locale");
 								const value = this.getRoot().queryView({ name:"lang" }).getValue();
 								langs.setLang(value);
@@ -76,9 +76,38 @@ export default class StartView extends JetView {
 	}
 	init() {
 		let token = webix.storage.local.get("tokenOfUser");
+
 		if (!token) {
-			this.formForAuthorization = this.ui(FormView);
+			this.authorizationWindow();
 		}
+	}
+	authorizationWindow() {
+		let startPage = this;
+		this.ui(FormView).showWindow("", function(data) {
+			if (!data.username) {
+				webix.ajax().post("http://localhost:3013/users/login", data).then(function(response) {
+					response = response.json();
+					webix.storage.local.put("tokenOfUser", response);
+					webix.message({ type:"success", text:"You are logged in" });
+					startPage.refresh();
+				}, function(err) {
+					if (err.status == 403) {
+						webix.message({ type:"error", text:"Неверный логин или пароль" });
+					}
+				});
+			}
+			else {
+				webix.ajax().post("http://localhost:3013/users/registration", data).then(function (response) {
+					response = response.json();
+					webix.storage.local.put("tokenOfUser", response);
+					webix.message({ type:"success", text:"You are registered" });
+					startPage.refresh();
+				}, function (err) {
+					webix.message({ type:"error", text: err.responseText });
+				});
+			}
+
+		});
 	}
 	$getTemplate() {
 		return this.$$("template");

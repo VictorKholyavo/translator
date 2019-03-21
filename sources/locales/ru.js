@@ -1,4 +1,11 @@
 export default {
+	//AuthorizationWindow//
+	"Authorization": "Авторизация",
+	"Registration": "Регистрация",
+	"Login": "Войти",
+	"Register": "Зарегистрироваться",
+	"Username": "Имя",
+	"Password": "Пароль",
 	//Start Page and Menu//
 	"Start Page": "Начальная страница",
 	"Word Base": "База слов",
@@ -7,8 +14,11 @@ export default {
 	"Logout": "Выйти",
 	//WordBase//
 	"Add Group": "Добавить группу",
+	"Title": "Название",
 	"Delete group": "Удалить группу",
 	"Add word": "Добавить слово",
+	"Save": "Сохранить",
+	"Close": "Закрыть",
 	"Export to Excel": "Экспорт группу слов в Excel",
 	"English": "Английский вариант",
 	"Russian": "Русский вариант",

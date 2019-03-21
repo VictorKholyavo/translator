@@ -2,6 +2,8 @@ import {JetView} from "webix-jet";
 
 export default class FormforGroupsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const form = {
 			view: "form",
 			localId: "form",
@@ -10,7 +12,7 @@ export default class FormforGroupsView extends JetView {
 				{
 					view: "text",
 					name: "title",
-					label: "Title"
+					label: _("Title")
 				},
 				{
 					cols: [
@@ -59,14 +61,16 @@ export default class FormforGroupsView extends JetView {
 		};
 	}
 	showWindow(values, filled) {
+		const _ = this.app.getService("locale")._;
+
 		let formTemplate = this.$$("formTemplate");
 		this.getRoot().show();
 		if (values) {
 			this.$getForm().setValues(values);
-			formTemplate.define({template: "Edit group"});
+			formTemplate.define({template: _("Edit Group")});
 		}
 		else {
-			formTemplate.define({template: "Add ggroup"});
+			formTemplate.define({template: _("Add Group")});
 		}
 		formTemplate.refresh();
 		this.onSubmit = function(data) {

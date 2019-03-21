@@ -3,6 +3,8 @@ import {partOfSpeech} from "models/partOfSpeech";
 
 export default class FormforWordsView extends JetView {
 	config() {
+		const _ = this.app.getService("locale")._;
+
 		const form = {
 			view: "form",
 			localId: "form",
@@ -11,17 +13,17 @@ export default class FormforWordsView extends JetView {
 				{
 					view: "text",
 					name: "english",
-					label: "English"
+					label: _("English")
 				},
 				{
 					view: "text",
 					name: "russian",
-					label: "Russian"
+					label: _("Russian")
 				},
 				{
 					view: "richselect",
 					name: "partOfSpeech",
-					label: "PartOfSpeech",
+					label: _("Part of speech"),
 					options: partOfSpeech
 				},
 				{
@@ -29,7 +31,7 @@ export default class FormforWordsView extends JetView {
 						{
 							view: "button",
 							localId: "updateButton",
-							value: "Save",
+							value: _("Save"),
 							click: () => {
 								const values = this.$getForm().getValues();
 								this.onSubmit(values);
@@ -38,7 +40,7 @@ export default class FormforWordsView extends JetView {
 						{
 							view: "button",
 							localId: "closeButton",
-							value: "Close",
+							value: _("Close"),
 							click: function () {
 								this.getTopParentView().hide();
 							}
@@ -71,14 +73,16 @@ export default class FormforWordsView extends JetView {
 		};
 	}
 	showWindow(values, filled) {
+		const _ = this.app.getService("locale")._;
+
 		let formTemplate = this.$$("formTemplate");
 		this.getRoot().show();
 		if (values) {
 			this.$getForm().setValues(values);
-			formTemplate.define({template: "Edit word"});
+			formTemplate.define({template: _("Edit word")});
 		}
 		else {
-			formTemplate.define({template: "Add word"});
+			formTemplate.define({template: _("Add word")});
 		}
 		formTemplate.refresh();
 		this.onSubmit = function(data) {

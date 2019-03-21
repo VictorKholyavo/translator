@@ -134,7 +134,7 @@ export default class DataView extends JetView{
 		this.FormForWordsView = this.ui(FormForWordsView);
 		let datatable = this.$getDatatable();
 		let list = this.$getList();
-		list.attachEvent("onDataUpdate",  () => {
+		list.attachEvent("onDataUpdate", () => {
 			list.refresh();
 			datatable.refresh();
 		});
