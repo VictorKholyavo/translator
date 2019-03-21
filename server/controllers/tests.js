@@ -3,7 +3,6 @@ let app = express();
 const mongoose = require('mongoose');
 const Groups = require('../schemas/groups');
 const User = require('../schemas/users');
-const Words = require('../schemas/words');
 const Results = require('../schemas/testresults');
 
 app.get('/all', async (req, res) => {

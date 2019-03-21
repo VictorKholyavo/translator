@@ -1,10 +1,10 @@
-const User = require('../schemas/users');
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const exjwt = require('express-jwt');
 const bcrypt = require('bcrypt');
+const User = require('../schemas/users');
 const Results = require('../schemas/testresults');
 
 app.get('/', async (req, res) => {

@@ -131,15 +131,15 @@ export default class TestView extends JetView {
 			results.push(answer);
 		}
 		else {
+			this.$getDatatable().addCellCss(id, column, "button_lightblue");
 			for (let i = 0; i < results.length; i++) {
-				if (results[i].question == answer.question) {
+				if (answer.question === results[i].question) {
 					results[i] = answer;
-					break;
+					return;
 				}
 			}
 			results.push(answer);
 		}
-		this.$getDatatable().addCellCss(id, column, "button_lightblue");
 	}
 	init() {
 	}

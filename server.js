@@ -6,7 +6,6 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const session = require('express-session');
 const UsersController = require('./server/controllers/users');
-const WordsController = require('./server/controllers/words');
 const GroupsController = require('./server/controllers/groups');
 const TestsController = require('./server/controllers/tests');
 const ResultsController = require('./server/controllers/testresults');
@@ -32,20 +31,18 @@ mongoose.connect(`mongodb://${process.env.DB_HOST || 'localhost'}:27017/myapir`,
   console.log('Successfully connected');
 	const db = mongoose.connection;
 
-	app.use(session({
-	  secret: 'work hard',
-		path: '/',
-	  resave: true,
-	  saveUninitialized: false,
-		cookie: {maxAge: 10000},
-	  store: new MongoStore({
-	    mongooseConnection: db
-	  })
-	}));
+	// app.use(session({
+	//   secret: 'work hard',
+	// 	path: '/',
+	//   resave: true,
+	//   saveUninitialized: false,
+	// 	cookie: {maxAge: 10000},
+	//   store: new MongoStore({
+	//     mongooseConnection: db
+	//   })
+	// }));
 
 	app.use('/users', UsersController);
-
-	app.use('/words', WordsController);
 
 	app.use('/groups', GroupsController);
 
