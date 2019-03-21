@@ -97,7 +97,7 @@ export default class TestView extends JetView {
 									let partOfSpeech = this.$getDatatable().getText(id, "partOfSpeech");
 									value = value.split(" ");
 									let answer = {id: id.row, partOfSpeech: partOfSpeech, question: question, value: value[3]};
-									this.addAnswer(answer, id, id.column);
+									this.addAnswer(answer, id);
 								}
 							},
 						},
@@ -126,20 +126,20 @@ export default class TestView extends JetView {
 	$getDatatable() {
 		return this.$$("datatable");
 	}
-	addAnswer(answer, id, column) {
-		if (!results[0]) {
-			results.push(answer);
-		}
-		else {
-			this.$getDatatable().addCellCss(id, column, "button_lightblue");
-			for (let i = 0; i < results.length; i++) {
-				if (answer.question === results[i].question) {
-					results[i] = answer;
-					return;
-				}
+	addAnswer(answer, row) {
+		this.$getDatatable().addCellCss(row, row.column, "button_lightblue");
+		for (let i = 0; i < results.length; i++) {
+			if (answer.question === results[i].question) {
+				results[i] = answer;
+				this.$getDatatable().removeCellCss(row, "option1", "button_lightblue");
+				this.$getDatatable().removeCellCss(row, "option2", "button_lightblue");
+				this.$getDatatable().removeCellCss(row, "option3", "button_lightblue");
+				this.$getDatatable().removeCellCss(row, "option4", "button_lightblue");
+				this.$getDatatable().addCellCss(row, row.column, "button_lightblue");
+				return;
 			}
-			results.push(answer);
 		}
+		results.push(answer);
 	}
 	init() {
 	}
